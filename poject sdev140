@@ -1,0 +1,109 @@
+import tkinter as tk
+from tkinter import messagebox
+
+class MP3PlayerApp:
+    def __init__(self, master):
+        """
+        Constructor for the MP3PlayerApp class.
+
+        Args:
+            master (tk.Tk): The main window.
+        """
+        self.master = master
+        self.master.title("MP3 Player")
+
+        # Initialize variables
+        self.song_name_var = tk.StringVar()
+        self.status_var = tk.StringVar()
+        self.status_var.set("Status: Stopped")
+
+        # Create and place widgets on the main window
+        self.label = tk.Label(master, text="Welcome to the MP3 Player!")
+        self.label.pack(pady=10)
+
+        self.button_open_player = tk.Button(master, text="Open Player", command=self.open_player)
+        self.button_open_player.pack(pady=5)
+
+        self.button_exit = tk.Button(master, text="Exit", command=self.exit_app)
+        self.button_exit.pack(pady=5)
+
+    def open_player(self):
+        """
+        Opens the player window with additional controls.
+
+        Creates a new window for the MP3 player and adds widgets.
+
+        Widgets:
+            label_player: Label to display "Now Playing".
+            entry_song_name: Entry box for entering the song name.
+            button_play: Button to trigger play_music callback.
+            button_stop: Button to trigger stop_music callback.
+            button_pause: Button to trigger pause_music callback.
+            label_status: Label to display the status of the music player.
+        """
+        player_window = tk.Toplevel(self.master)
+        player_window.title("MP3 Player - Now Playing")
+
+        label_player = tk.Label(player_window, text="Now Playing:")
+        label_player.pack(pady=10)
+
+        entry_song_name = tk.Entry(player_window, textvariable=self.song_name_var, width=30)
+        entry_song_name.pack(pady=5)
+
+        button_play = tk.Button(player_window, text="Play", command=self.play_music)
+        button_play.pack(pady=5)
+
+        button_stop = tk.Button(player_window, text="Stop", command=self.stop_music)
+        button_stop.pack(pady=5)
+
+        button_pause = tk.Button(player_window, text="Pause", command=self.pause_music)
+        button_pause.pack(pady=5)
+
+        label_status = tk.Label(player_window, textvariable=self.status_var)
+        label_status.pack(pady=5)
+
+    def play_music(self):
+        """
+        Callback function for the play button.
+
+        Plays the entered music and updates the status label.
+        """
+        song_name = self.song_name_var.get()
+        if not song_name:
+            messagebox.showwarning("Warning", "Please enter a song name.")
+        else:
+            self.status_var.set("Status: Playing")
+            messagebox.showinfo("Play", f"Playing: {song_name}")
+
+    def stop_music(self):
+        """
+        Callback function for the stop button.
+
+        Stops the music and updates the status label.
+        """
+        self.status_var.set("Status: Stopped")
+        messagebox.showinfo("Stop", "Stopping music!")
+
+    def pause_music(self):
+        """
+        Callback function for the pause button.
+
+        Pauses the music and updates the status label.
+        """
+        self.status_var.set("Status: Paused")
+        messagebox.showinfo("Pause", "Pausing music!")
+
+    def exit_app(self):
+        """
+        Callback function for the exit button.
+
+        Destroys the main window, closing the application.
+        """
+        self.master.destroy()
+
+# Create the main window
+root = tk.Tk()
+app = MP3PlayerApp(root)
+
+# Start the main loop
+root.mainloop()
